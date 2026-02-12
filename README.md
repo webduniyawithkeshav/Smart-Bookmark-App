@@ -315,6 +315,17 @@ redirectTo: `${window.location.origin}/auth/callback`
 ```
 And added both localhost and production URLs to Google OAuth allowed redirect URIs.
 
+### Problem 5: OAuth Worked Locally but Failed After Deployment
+**Issue**: Google OAuth authentication worked correctly during local development, but after deploying to Vercel, login failed once the localhost server was turned off. Users were redirected incorrectly and the session was not established.
+
+**Root Cause**: The Supabase and Google OAuth redirect URLs were configured only for `http://localhost:3000`. After deployment, the application was hosted on a Vercel domain, but this production callback URL was not added to Supabase Authentication settings.
+
+**Solution**: Updated Supabase Authentication URL configuration to include both development and production callback URLs:
+- `http://localhost:3000/auth/callback`
+- `https://smart-bookmark-app-beta.vercel.app/auth/callback`
+
+This ensured the OAuth flow correctly redirected back to the deployed application and worked in both local and production environments.
+
 ## Future Improvements
 
 ### Search Functionality
